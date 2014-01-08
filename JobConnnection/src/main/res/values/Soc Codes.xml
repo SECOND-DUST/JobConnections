@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SOC COODES -->
+    <!-- 1115 -->
+    <string-array name="t1115">
+        <item>Chief executives and senior officials</item>
+    </string-array>
+    <string-array name= "at1115">
+        <item>Ambassador (Foreign and Commonwealth Office)</item>
+        <item>Band 0 (Health and Safety Executive)</item>
+        <item>Band 1B (Meteorological Office)</item>
+        <item>Band 1C (Meteorological Office)</item>
+        <item>Chairman, company</item>
+        <item>Chairman (health authority)</item>
+        <item>Chairman</item>
+        <item>Clerk to the commissioners (HM Revenue and Customs)</item>
+        <item>Commissioner (government)</item>
+        <item>Diplomat</item>
+        <item>Director, deputy (government)</item>
+        <item>Director, group (government)</item>
+        <item>Director (government)</item>
+        <item>Director (National Assembly for Wales)</item>
+        <item>Executive, chief (charitable organisation)</item>
+        <item>Executive, chief (health authority: hospital service)</item>
+        <item>Executive, chief (local government)</item>
+        <item>Executive, chief (National Assembly for Wales)</item>
+        <item>Executive, chief</item>
+        <item>Grade 1 (Foreign and Commonwealth Office)</item>
+        <item>Grade 1 (government)</item>
+        <item>Grade 2 (Foreign and Commonwealth Office)</item>
+        <item>Grade 2 (government)</item>
+        <item>Grade 3 (Foreign and Commonwealth Office)</item>
+        <item>Grade 3 (government)</item>
+        <item>Grade 4 (Foreign and Commonwealth Office)</item>
+        <item>Grade 5 (Foreign and Commonwealth Office)</item>
+    </string-array>
+
+</resources>
