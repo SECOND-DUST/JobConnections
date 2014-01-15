@@ -1,69 +1,4 @@
-package com.SECDUST.jobconnnection;
-
-import android.support.v7.app.ActionBarActivity;
-import android.widget.Button;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-
-/**
- * Created by Chad on 14/01/14.
- */
-public class PythonCodeToBeConverted extends ActionBarActivity {
-    public JSONObject Results = new JSONObject();
-    final String LMIForAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
-
-    final String socSearchURL = "soc/search";
-    final String wfPredictURL = "wf/predict";
-    InputStream is = null;
-
-    String json = "";
-    String Query = "";
-    JSONParser test = new JSONParser();
-
-    public void test() {
-        setContentView(R.layout.fragment_test);
-
-        final Button Search = (Button) findViewById(R.id.carrersearch);
-        final EditText searchquery = (EditText) findViewById(R.id.editText);
-        final TextView ResultDisplay = (TextView) findViewById(R.id.textView);
-        Search.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (null != searchquery.getText().toString()){
-                String query = searchquery.getText().toString();
-                Results = searchquery(query);
-                //ResultDisplay.setText();
-                   JSONArray ResultArray = null;
-                    try {
-                        Results.toJSONArray(ResultArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    for (int i =0;i<ResultArray.length();i++) {
-                    try {
-                        ResultDisplay.append(ResultArray.getString(i));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                }
-            }
-        });
-
-    }
-    public JSONObject searchquery(String Query){
-        Results = test.getJSONFromUrl(LMIForAllBaseURL+socSearchURL+"?q="+Query);
-        return Results;
-    }
-    /*
+   /*
 import requests
 
         LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/"
@@ -132,4 +67,3 @@ import requests
 
         print jsonObj # prints the json data unformatted
  */
-}

@@ -1,7 +1,9 @@
 package com.SECDUST.jobconnnection;
 
+import java.io.InputStream;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,173 +18,127 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends ActionBarActivity {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    public SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
-
-    //URL to get JSON Array
-    private static String url = "http://api.lmiforall.org.uk/api/v1/soc/search?q=";
-    //JSON Node Names
-
-    private static final String TAG_NAME = "name";
-
-    JSONArray user = null;
-
+public class MainActivity extends Activity {
+    String LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
+    String socSearchURL = "soc/search";
+    EditText etQuery;
+    TextView tvIsConnected;
+    TextView tvResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get Search box
-        EditText Search = (EditText) findViewById(R.id.editText);
+        // get reference to the views
+        etQuery = (EditText) findViewById(R.id.editText);
+        tvIsConnected = (TextView) findViewById(R.id.textView2);
+        tvResponse = (TextView)findViewById(R.id.textView);
 
-        // Creating new JSON Parser
-        JSONParser jParser = new JSONParser();
+        // check if you are connected or not
+        if(isConnected()){
+            tvIsConnected.setText("You are conncted");
+        }
+        else{
+            tvIsConnected.setText("You are NOT conncted");
+        }
 
-        // Getting JSON from URL
-        JSONObject json = jParser.getJSONFromUrl(url + Search.getText());
+        // call AsynTask to perform network operation on separate thread
+         new HttpAsyncTask().execute(LMIforAllBaseURL+socSearchURL+"?q=chef");
+    }
 
+    public static String GET(String url){
+        InputStream inputStream = null;
+        String result = "";
         try {
-            // Getting JSON Array
-            user = json.getJSONArray(TAG_NAME);
-            JSONObject c = user.getJSONObject(0);
-            c.getString(user.toString());
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
         }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new
+        return result;
+    }
 
-                SectionsPagerAdapter(getSupportFragmentManager()
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while((line = bufferedReader.readLine()) != null)
+            result += line;
 
-        );
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        inputStream.close();
+        return result;
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
-
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
+        protected String doInBackground(String... urls) {
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return GET(urls[0]);
         }
-
+        // onPostExecute displays the results of the AsyncTask.
         @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            String c="";
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Spinner sepresult = (Spinner)findViewById(R.id.spinner);
+                c = jsonObject.get("title").toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            return null;
+            tvResponse.setText(result);
         }
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = null;
-            if (rootView != null) {
-                textView = (TextView) rootView.findViewById(R.id.section_label);
-            }
-            if (textView != null) {
-                textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            }
-            return rootView;
-        }
-    }
-
 }
