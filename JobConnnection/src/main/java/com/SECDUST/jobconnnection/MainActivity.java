@@ -134,7 +134,6 @@ public class MainActivity extends Activity {
             try {
                 JSONArray jsonArray = new JSONArray(result);
                 Spinner sepresult = (Spinner)findViewById(R.id.spinner);
-                sepresult.add
 
             } catch (JSONException e) {
                 e.printStackTrace();
