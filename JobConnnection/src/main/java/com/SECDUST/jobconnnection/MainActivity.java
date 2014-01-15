@@ -130,11 +130,12 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-            String c="";
+            JSONArray c;
             try {
-                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = new JSONArray(result);
                 Spinner sepresult = (Spinner)findViewById(R.id.spinner);
-                c = jsonObject.get("title").toString();
+                sepresult.add
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
