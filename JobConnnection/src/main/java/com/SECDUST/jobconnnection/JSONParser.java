@@ -3,6 +3,7 @@ package com.SECDUST.jobconnnection;
 /**
  * Created by Shadic on 07/01/14.
  */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.Button;
 
 public class JSONParser {
 

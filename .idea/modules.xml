@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../AndroidStudioProjects.iml" filepath="$PROJECT_DIR$/../AndroidStudioProjects.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobConnection.iml" filepath="$PROJECT_DIR$/JobConnection.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobConnections.iml" filepath="$PROJECT_DIR$/JobConnections.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobConnnection/JobConnnection.iml" filepath="$PROJECT_DIR$/JobConnnection/JobConnnection.iml" />

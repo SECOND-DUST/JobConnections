@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // get Search box
-        EditText Search = (EditText)findViewById(R.id.editText);
+        EditText Search = (EditText) findViewById(R.id.editText);
 
         // Creating new JSON Parser
         JSONParser jParser = new JSONParser();
@@ -72,20 +72,20 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-    // Create the adapter that will return a fragment for each of the three
-    // primary sections of the activity.
-    mSectionsPagerAdapter=new
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new
 
-    SectionsPagerAdapter(getSupportFragmentManager()
+                SectionsPagerAdapter(getSupportFragmentManager()
 
-    );
+        );
 
-    // Set up the ViewPager with the sections adapter.
-    mViewPager=(ViewPager) findViewById(R.id.pager);
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
 
-    mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-}
+    }
 
 
     @Override
@@ -106,83 +106,83 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-/**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-    public SectionsPagerAdapter(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
-    }
-
-    @Override
-    public int getCount() {
-        // Show 3 total pages.
-        return 3;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        Locale l = Locale.getDefault();
-        switch (position) {
-            case 0:
-                return getString(R.string.title_section1).toUpperCase(l);
-            case 1:
-                return getString(R.string.title_section2).toUpperCase(l);
-            case 2:
-                return getString(R.string.title_section3).toUpperCase(l);
-        }
-        return null;
-    }
-}
-
-/**
- * A placeholder fragment containing a simple view.
- */
-public static class PlaceholderFragment extends Fragment {
     /**
-     * The fragment argument representing the section number for this
-     * fragment.
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
      */
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_section1).toUpperCase(l);
+                case 1:
+                    return getString(R.string.title_section2).toUpperCase(l);
+                case 2:
+                    return getString(R.string.title_section3).toUpperCase(l);
+            }
+            return null;
+        }
+    }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * A placeholder fragment containing a simple view.
      */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
-        Bundle args = new Bundle();
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
 
-    public PlaceholderFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = null;
-        if (rootView != null) {
-            textView = (TextView) rootView.findViewById(R.id.section_label);
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
         }
-        if (textView != null) {
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+        public PlaceholderFragment() {
         }
-        return rootView;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView textView = null;
+            if (rootView != null) {
+                textView = (TextView) rootView.findViewById(R.id.section_label);
+            }
+            if (textView != null) {
+                textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+            }
+            return rootView;
+        }
     }
-}
 
 }
