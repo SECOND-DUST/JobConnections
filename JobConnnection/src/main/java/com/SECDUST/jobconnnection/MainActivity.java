@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,10 +60,34 @@ public class MainActivity extends Activity {
     TextView tvResponse;
     Spinner sepresult;
 
+    EditText txtSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //getting the text input + button ready for using.
+        txtSearch = (EditText) findViewById(R.id.editText);
+        final Button btnSearch = (Button) findViewById(R.id.carrersearch);
+
+        //This will disable the search button so long as there's no text in the searchbar
+        txtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                btnSearch.setEnabled(!txtSearch.getText().toString().trim().isEmpty());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        })
 
         // get reference to the views
         etQuery = (EditText) findViewById(R.id.editText);
