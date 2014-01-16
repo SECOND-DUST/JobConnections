@@ -68,10 +68,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //getting the text input + button ready for using.
-        txtSearch = (EditText) findViewById(R.id.editText);
+        txtSearch = (EditText) findViewById(R.id.searchTxt);
         final Button btnSearch = (Button) findViewById(R.id.carrersearch);
 
         //This will disable the search button so long as there's no text in the searchbar
+        //It works, AFTER you enter then delete something from the txtbox. needs fixing.
         txtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
