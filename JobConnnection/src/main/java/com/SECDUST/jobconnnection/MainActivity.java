@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
             public void afterTextChanged(Editable editable) {
 
             }
-        })
+        });
 
         // get reference to the views
         etQuery = (EditText) findViewById(R.id.editText);
