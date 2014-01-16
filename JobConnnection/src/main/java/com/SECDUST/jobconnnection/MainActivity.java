@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +45,18 @@ public class MainActivity extends Activity {
     ExpandableListView Tasks;
     ExpandableListView Quali;
 
-
     EditText txtSearch;
+
+
+    private ExpandListAdapter ExpAdapter;
+    private ArrayList<ExpandListGroup> ExpListItems;
+    private ExpandableListView ExpandList;
+
+    ArrayList<String> TitleArrayList;
+    ArrayList<String> DescArrayList;
+    ArrayList<String> QualArrayList;
+    ArrayList<String> TaskArrayList;
+    ArrayList<Integer> SocArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +71,6 @@ public class MainActivity extends Activity {
 
         //This will disable the search button so long as there's no text in the searchbar
         //don't need to disable btn by default
-
         txtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -72,7 +84,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                boolean enablebtn = ! txtSearch.getText().toString().equals("");
+                boolean enablebtn = !txtSearch.getText().toString().equals("");
                 btnSearch.setEnabled(enablebtn);
             }
         });
@@ -88,9 +100,38 @@ public class MainActivity extends Activity {
         } else {
             tvIsConnected.setText("You are NOT conncted");
         }
+        sepresult = (Spinner) findViewById(R.id.spinner);
 
         // call AsynTask to perform network operation on separate thread
         new HttpAsyncTask().execute(LMIforAllBaseURL + socSearchURL + "?q=chef");
+
+
+
+
+
+        sepresult.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(DescArrayList != null){
+                    ExpListItems = SetStandardGroups();
+                }
+                if(QualArrayList != null){
+                    ExpListItems = SetStandardGroups();
+                }
+                if(TaskArrayList != null){
+                    ExpListItems = SetStandardGroups();
+                }
+                if(SocArrayList != null){
+                    ExpListItems = SetStandardGroups();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
     }
 
@@ -159,10 +200,10 @@ public class MainActivity extends Activity {
                 sepresult = (Spinner) findViewById(R.id.spinner);
                 String stringArray[];
                 ArrayList<String> TitleArrayList = new ArrayList<String>();
-                ArrayList<String> DescArrayList = new ArrayList<String>();
-                ArrayList<String> QualArrayList = new ArrayList<String>();
-                ArrayList<String> TaskArrayList = new ArrayList<String>();
-                ArrayList<Integer> SocArrayList = new ArrayList<Integer>();
+                DescArrayList = new ArrayList<String>();
+                QualArrayList = new ArrayList<String>();
+                TaskArrayList = new ArrayList<String>();
+                SocArrayList = new ArrayList<Integer>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject json_data = jsonArray.getJSONObject(i);
                     TitleArrayList.add(json_data.getString("title"));
@@ -173,7 +214,11 @@ public class MainActivity extends Activity {
                 }
                 stringArray = TitleArrayList.toArray(new String[TitleArrayList.size()]);
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, stringArray);
-               sepresult.setAdapter(spinnerArrayAdapter);
+                sepresult.setAdapter(spinnerArrayAdapter);
+                ExpListItems = SetStandardGroups();
+                ExpAdapter = new ExpandListAdapter(MainActivity.this, ExpListItems);
+                Desc = (ExpandableListView) findViewById(R.id.expandableListView);
+                Desc.setAdapter(ExpAdapter);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -181,4 +226,60 @@ public class MainActivity extends Activity {
             tvResponse.setText(result);
         }
     }
+
+    public ArrayList<ExpandListGroup> SetStandardGroups() {
+        ArrayList<ExpandListGroup> list = new ArrayList<ExpandListGroup>();
+        ArrayList<ExpandListChild> list2 = new ArrayList<ExpandListChild>();
+        ArrayList<ExpandListChild> listD = new ArrayList<ExpandListChild>();
+        ArrayList<ExpandListChild> listT = new ArrayList<ExpandListChild>();
+        ArrayList<ExpandListChild> listS = new ArrayList<ExpandListChild>();
+        ArrayList<ExpandListChild> listQ = new ArrayList<ExpandListChild>();
+
+        ExpandListGroup Descript = new ExpandListGroup();
+        Descript.setName("Description");
+        ExpandListGroup Tasks = new ExpandListGroup();
+        Tasks.setName("Task");
+        ExpandListGroup Qualies = new ExpandListGroup();
+        Qualies.setName("Qualifications");
+        ExpandListGroup SocCode = new ExpandListGroup();
+        SocCode.setName("Soc");
+        ExpandListChild PlaceHolder = new ExpandListChild();
+        PlaceHolder.setName("N/A");
+        PlaceHolder.setTag(null);
+        list2.add(PlaceHolder);
+
+        int i = sepresult.getSelectedItemPosition();
+        ExpandListChild Desctext = new ExpandListChild();
+        Desctext.setName(DescArrayList.get(i));
+        Desctext.setTag(null);
+        listD.add(Desctext);
+
+        ExpandListChild Tasktext = new ExpandListChild();
+        Tasktext.setName(TaskArrayList.get(i));
+        Tasktext.setTag(null);
+        listT.add(Tasktext);
+
+        ExpandListChild Qualtext = new ExpandListChild();
+        Qualtext.setName(QualArrayList.get(i));
+        Qualtext.setTag(null);
+        listQ.add(Qualtext);
+
+        ExpandListChild Soctext = new ExpandListChild();
+        Soctext.setName(SocArrayList.get(i).toString());
+        Soctext.setTag(null);
+        listS.add(Soctext);
+
+        Descript.setItems(listD);
+        Tasks.setItems(listT);
+        Qualies.setItems(listQ);
+        SocCode.setItems(listS);
+        list.add(Descript);
+        list.add(Tasks);
+        list.add(Qualies);
+        list.add(SocCode);
+
+        return list;
+    }
+
 }
+
