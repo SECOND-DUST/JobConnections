@@ -81,7 +81,7 @@
         android:divider="@color/abc_search_url_text_selected"
         android:dividerHeight="10px"
         android:drawSelectorOnTop="false"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice" /><![CDATA[
 
 
     TextView
@@ -97,4 +97,5 @@
         android:layout_alignEnd="@+id/editText"
         android:lines="10" />
 
+]]>
 </RelativeLayout>
