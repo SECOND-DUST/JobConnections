@@ -114,15 +114,9 @@ public class MainActivity extends Activity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if(DescArrayList != null){
                     ExpListItems = SetStandardGroups();
-                }
-                if(QualArrayList != null){
-                    ExpListItems = SetStandardGroups();
-                }
-                if(TaskArrayList != null){
-                    ExpListItems = SetStandardGroups();
-                }
-                if(SocArrayList != null){
-                    ExpListItems = SetStandardGroups();
+                    ExpAdapter = new ExpandListAdapter(MainActivity.this, ExpListItems);
+                    Desc.setAdapter(ExpAdapter);
+
                 }
             }
 
@@ -248,6 +242,7 @@ public class MainActivity extends Activity {
         PlaceHolder.setTag(null);
         list2.add(PlaceHolder);
 
+        sepresult = (Spinner) findViewById(R.id.spinner);
         int i = sepresult.getSelectedItemPosition();
         ExpandListChild Desctext = new ExpandListChild();
         Desctext.setName(DescArrayList.get(i));
