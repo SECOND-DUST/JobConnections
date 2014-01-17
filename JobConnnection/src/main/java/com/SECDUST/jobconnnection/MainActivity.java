@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         //getting the text input + button ready for using.
         txtSearch = (EditText) findViewById(R.id.searchTxt);
         final Button btnSearch = (Button) findViewById(R.id.carrersearch);
-        boolean enablebtn = !(txtSearch.getText().toString().equals(""));
+        boolean enablebtn = !(txtSearch.getText().toString().trim().equals(""));
         btnSearch.setEnabled(enablebtn);
 
         //This will disable the search button so long as there's no text in the searchbar
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                boolean enablebtn = !txtSearch.getText().toString().equals("");
+                boolean enablebtn = !txtSearch.getText().toString().trim().equals("");
                 btnSearch.setEnabled(enablebtn);
             }
         });
