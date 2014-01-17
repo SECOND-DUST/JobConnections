@@ -83,7 +83,9 @@
         android:divider="@color/abc_search_url_text_selected"
         android:dividerHeight="10px"
         android:drawSelectorOnTop="false"
-        android:choiceMode="singleChoice" /><![CDATA[
+        android:choiceMode="singleChoice"
+        android:groupIndicator="@null"
+        android:footerDividersEnabled="false" /><![CDATA[
 
 
     TextView
