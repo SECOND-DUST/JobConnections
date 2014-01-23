@@ -1,6 +1,7 @@
 package com.SECDUST.jobconnnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -33,24 +34,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+
 public class MainActivity extends Activity {
-    String LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
-    String socSearchURL = "soc/search";
+    public Activity context2 = this;
+
+    static String LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
+    static String socSearchURL = "soc/search";
     EditText etQuery;
     TextView tvIsConnected;
     TextView tvResponse;
-    Spinner sepresult;
-    ExpandableListView Desc;
-    ExpandableListView Soc;
-    ExpandableListView Tasks;
-    ExpandableListView Quali;
+    public static Spinner sepresult;
+    ExpandableListView Details;
 
     EditText txtSearch;
 
 
-    private ExpandListAdapter ExpAdapter;
-    private ArrayList<ExpandListGroup> ExpListItems;
-    private ExpandableListView ExpandList;
+    public ExpandListAdapter ExpAdapter;
+    public ArrayList<ExpandListGroup> ExpListItems;
+    public ExpandableListView ExpandList;
 
     ArrayList<String> TitleArrayList;
     ArrayList<String> DescArrayList;
@@ -58,10 +59,23 @@ public class MainActivity extends Activity {
     ArrayList<String> TaskArrayList;
     ArrayList<Integer> SocArrayList;
 
+    GlobalVars variables = new GlobalVars();
+
+    public static Context context;
+
+    public void setSepresult(Spinner sepresult) {
+        this.sepresult = sepresult;
+    }
+
+    public Spinner getSepresult() {
+        return sepresult;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainActivity.context = getApplicationContext();
 
         //getting the text input + button ready for using.
         //Also setting the button to disabled by default.
@@ -100,21 +114,22 @@ public class MainActivity extends Activity {
             tvIsConnected.setText("You are NOT conncted");
         }
         sepresult = (Spinner) findViewById(R.id.spinner);
+        setSepresult(sepresult);
+        Details = (ExpandableListView) findViewById(R.id.expandableListView);
+        GlobalVars.getDetails(Details);
+        GlobalVars.getSepResult(sepresult);
 
-        // call AsynTask to perform network operation on separate thread
+        // call AsynTask to perform network operation on separate
         new HttpAsyncTask().execute(LMIforAllBaseURL + socSearchURL + "?q=chef");
-
-
-
 
 
         sepresult.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if(DescArrayList != null){
+                if (GlobalVars.SavedDescArrayList != null) {
                     ExpListItems = SetStandardGroups();
                     ExpAdapter = new ExpandListAdapter(MainActivity.this, ExpListItems);
-                    Desc.setAdapter(ExpAdapter);
+                    Details.setAdapter(ExpAdapter);
 
                 }
             }
@@ -128,45 +143,6 @@ public class MainActivity extends Activity {
 
     }
 
-    public static String GET(String url) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
-            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
-            if (inputStream != null)
-                result = convertInputStreamToString(inputStream);
-            else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        return result;
-    }
-
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while ((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
-
-    }
-
     public boolean isConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -175,52 +151,7 @@ public class MainActivity extends Activity {
         else
             return false;
     }
-
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            return GET(urls[0]);
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-            JSONArray c;
-            try {
-                JSONArray jsonArray = new JSONArray(result);
-                sepresult = (Spinner) findViewById(R.id.spinner);
-                String stringArray[];
-                ArrayList<String> TitleArrayList = new ArrayList<String>();
-                DescArrayList = new ArrayList<String>();
-                QualArrayList = new ArrayList<String>();
-                TaskArrayList = new ArrayList<String>();
-                SocArrayList = new ArrayList<Integer>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject json_data = jsonArray.getJSONObject(i);
-                    TitleArrayList.add(json_data.getString("title"));
-                    DescArrayList.add(json_data.getString("description"));
-                    QualArrayList.add(json_data.getString("qualifications"));
-                    TaskArrayList.add(json_data.getString("tasks"));
-                    SocArrayList.add(json_data.getInt("soc"));
-                }
-                stringArray = TitleArrayList.toArray(new String[TitleArrayList.size()]);
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, stringArray);
-                sepresult.setAdapter(spinnerArrayAdapter);
-                ExpListItems = SetStandardGroups();
-                ExpAdapter = new ExpandListAdapter(MainActivity.this, ExpListItems);
-                Desc = (ExpandableListView) findViewById(R.id.expandableListView);
-                Desc.setAdapter(ExpAdapter);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            tvResponse.setText(result);
-        }
-    }
-
-    public ArrayList<ExpandListGroup> SetStandardGroups() {
+    public static ArrayList<ExpandListGroup> SetStandardGroups() {
         ArrayList<ExpandListGroup> list = new ArrayList<ExpandListGroup>();
         ArrayList<ExpandListChild> list2 = new ArrayList<ExpandListChild>();
         ArrayList<ExpandListChild> listD = new ArrayList<ExpandListChild>();
@@ -241,7 +172,11 @@ public class MainActivity extends Activity {
         PlaceHolder.setTag(null);
         list2.add(PlaceHolder);
 
-        sepresult = (Spinner) findViewById(R.id.spinner);
+        sepresult = GlobalVars.setSpinner(sepresult);
+        ArrayList<String> DescArrayList = GlobalVars.SavedDescArrayList;
+        ArrayList<String> QualArrayList = GlobalVars.SavedQualArrayList;
+        ArrayList<Integer> SocArrayList = GlobalVars.SavedSocArrayList;
+        ArrayList<String> TaskArrayList = GlobalVars.SavedTaskArrayList;
         int i = sepresult.getSelectedItemPosition();
         ExpandListChild Desctext = new ExpandListChild();
         Desctext.setName(DescArrayList.get(i));
@@ -275,5 +210,8 @@ public class MainActivity extends Activity {
         return list;
     }
 
+    public static Context getAppContext() {
+        return MainActivity.context;
+    }
 }
 

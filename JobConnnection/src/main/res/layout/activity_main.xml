@@ -31,7 +31,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Enter an Occupation"
-        android:lines="1"
         android:singleLine="true" />
 
     <TextView

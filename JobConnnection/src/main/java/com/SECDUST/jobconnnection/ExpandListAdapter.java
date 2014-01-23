@@ -4,19 +4,20 @@ package com.SECDUST.jobconnnection;
  * Created by Chad on 16/01/14.
  */
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
-        import android.content.Context;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.BaseExpandableListAdapter;
-        import android.widget.TextView;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.TextView;
 
 public class ExpandListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<ExpandListGroup> groups;
+
     public ExpandListAdapter(Context context, ArrayList<ExpandListGroup> groups) {
         this.context = context;
         this.groups = groups;
@@ -31,6 +32,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         ch.add(item);
         groups.get(index).setItems(ch);
     }
+
     public void removeItem(ExpandListChild item, ExpandListGroup group) {
         if (!groups.contains(group)) {
             groups.add(group);
@@ -40,6 +42,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         ch.remove(item);
         groups.get(index).setItems(ch);
     }
+
     public Object getChild(int groupPosition, int childPosition) {
         // TODO Auto-generated method stub
         ArrayList<ExpandListChild> chList = groups.get(groupPosition).getItems();
