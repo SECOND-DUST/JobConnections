@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,28 +51,11 @@ public class MainActivity extends Activity {
 
     EditText txtSearch;
 
-
     public ExpandListAdapter ExpAdapter;
     public ArrayList<ExpandListGroup> ExpListItems;
     public ExpandableListView ExpandList;
 
-    ArrayList<String> TitleArrayList;
-    ArrayList<String> DescArrayList;
-    ArrayList<String> QualArrayList;
-    ArrayList<String> TaskArrayList;
-    ArrayList<Integer> SocArrayList;
-
-    GlobalVars variables = new GlobalVars();
-
     public static Context context;
-
-    public void setSepresult(Spinner sepresult) {
-        this.sepresult = sepresult;
-    }
-
-    public Spinner getSepresult() {
-        return sepresult;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +100,6 @@ public class MainActivity extends Activity {
             tvIsConnected.setText("You are NOT conncted");
         }
         sepresult = (Spinner) findViewById(R.id.spinner);
-        setSepresult(sepresult);
         Details = (ExpandableListView) findViewById(R.id.expandableListView);
         GlobalVars.getDetails(Details);
         GlobalVars.getSepResult(sepresult);
@@ -213,5 +198,7 @@ public class MainActivity extends Activity {
     public static Context getAppContext() {
         return MainActivity.context;
     }
+
+
 }
 

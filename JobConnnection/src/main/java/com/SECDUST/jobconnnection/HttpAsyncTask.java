@@ -1,13 +1,18 @@
 package com.SECDUST.jobconnnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -120,9 +125,9 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
                 SocArrayList.add(json_data.getInt("soc"));
             }
             stringArray = TitleArrayList.toArray(new String[TitleArrayList.size()]);
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(MainActivity.getAppContext(), android.R.layout.simple_spinner_item, stringArray);
+            ArrayAdapter<String> spinnerArrayAdapter = new MyAdapter(MainActivity.getAppContext(), R.layout.custom_spinner, stringArray);
             sepresult.setAdapter(spinnerArrayAdapter);
-            GlobalVars.setArrays(DescArrayList, QualArrayList, TaskArrayList, SocArrayList);
+            GlobalVars.setArrays(DescArrayList, QualArrayList, TaskArrayList, SocArrayList,TitleArrayList);
             //setArrays();
             GlobalVars.ExpListItems = MainActivity.SetStandardGroups();
             GlobalVars.ExpAdapter = new ExpandListAdapter(MainActivity.getAppContext(), GlobalVars.ExpListItems);
@@ -133,5 +138,6 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
     }
+
 
 }
