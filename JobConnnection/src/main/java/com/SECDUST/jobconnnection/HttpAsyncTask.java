@@ -37,6 +37,7 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
     ArrayList<String> TaskArrayList = new ArrayList<String>();
     ArrayList<Integer> SocArrayList = new ArrayList<Integer>();
     ExpandableListView Details;
+    String SearchUrl = "";
 
     public String GET(String url) {
         InputStream inputStream = null;
@@ -88,24 +89,20 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... urls) {
-
+        SearchUrl = urls[0];
         return GET(urls[0]);
     }
 
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(String result) {
-        Toast.makeText(MainActivity.getAppContext(), "Received!", Toast.LENGTH_LONG).show();
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            //test2.update();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         // tvResponse.setText(result);
-        Toast.makeText(MainActivity.getAppContext(), "Received!", Toast.LENGTH_LONG).show();
-        JSONArray c;
+        if (SearchUrl.contains("soc/search")) {
+            socSearch(result);
+        }
+    }
+
+    public void socSearch(String result){
         try {
             JSONArray jsonArray = new JSONArray(result);
             Spinner sepresult = null;
@@ -127,12 +124,57 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
             stringArray = TitleArrayList.toArray(new String[TitleArrayList.size()]);
             ArrayAdapter<String> spinnerArrayAdapter = new MyAdapter(MainActivity.getAppContext(), R.layout.custom_spinner, stringArray);
             sepresult.setAdapter(spinnerArrayAdapter);
-            GlobalVars.setArrays(DescArrayList, QualArrayList, TaskArrayList, SocArrayList,TitleArrayList);
+            GlobalVars.setArrays(DescArrayList, QualArrayList, TaskArrayList, SocArrayList, TitleArrayList);
             //setArrays();
-            GlobalVars.ExpListItems = MainActivity.SetStandardGroups();
-            GlobalVars.ExpAdapter = new ExpandListAdapter(MainActivity.getAppContext(), GlobalVars.ExpListItems);
-            Details = GlobalVars.setExpandableListVieew(Details);
-            GlobalVars.Details.setAdapter(GlobalVars.ExpAdapter);
+            if (TitleArrayList.size() >= 1) {
+                Toast.makeText(MainActivity.getAppContext(), "Received!", Toast.LENGTH_LONG).show();
+                GlobalVars.ExpListItems = MainActivity.SetStandardGroups();
+                GlobalVars.ExpAdapter = new ExpandListAdapter(MainActivity.getAppContext(), GlobalVars.ExpListItems);
+                Details = GlobalVars.setExpandableListVieew(Details);
+                GlobalVars.Details.setAdapter(GlobalVars.ExpAdapter);
+            } else {
+                Toast.makeText(MainActivity.getAppContext(), "Search query to broad. Please Refine Search Query", Toast.LENGTH_LONG).show();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void vacanciesSearch(String result){
+        try {
+            JSONArray jsonArray = new JSONArray(result);
+            Spinner sepresult = null;
+            sepresult = GlobalVars.setSpinner(sepresult);
+            String stringArray[];
+            ArrayList<String> TitleArrayList = new ArrayList<String>();
+            DescArrayList = new ArrayList<String>();
+            QualArrayList = new ArrayList<String>();
+            TaskArrayList = new ArrayList<String>();
+            SocArrayList = new ArrayList<Integer>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json_data = jsonArray.getJSONObject(i);
+                TitleArrayList.add(json_data.getString("title"));
+                DescArrayList.add(json_data.getString("description"));
+                QualArrayList.add(json_data.getString("qualifications"));
+                TaskArrayList.add(json_data.getString("tasks"));
+                SocArrayList.add(json_data.getInt("soc"));
+            }
+            stringArray = TitleArrayList.toArray(new String[TitleArrayList.size()]);
+            ArrayAdapter<String> spinnerArrayAdapter = new MyAdapter(MainActivity.getAppContext(), R.layout.custom_spinner, stringArray);
+            sepresult.setAdapter(spinnerArrayAdapter);
+            GlobalVars.setArrays(DescArrayList, QualArrayList, TaskArrayList, SocArrayList, TitleArrayList);
+            //setArrays();
+            if (TitleArrayList.size() >= 1) {
+                Toast.makeText(MainActivity.getAppContext(), "Received!", Toast.LENGTH_LONG).show();
+                GlobalVars.ExpListItems = MainActivity.SetStandardGroups();
+                GlobalVars.ExpAdapter = new ExpandListAdapter(MainActivity.getAppContext(), GlobalVars.ExpListItems);
+                Details = GlobalVars.setExpandableListVieew(Details);
+                GlobalVars.Details.setAdapter(GlobalVars.ExpAdapter);
+            } else {
+                Toast.makeText(MainActivity.getAppContext(), "Search query to broad. Please Refine Search Query", Toast.LENGTH_LONG).show();
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -35,10 +35,12 @@ public class GlobalVars extends Activity {
         Spin = sepresult;
         return sepresult;
     }
-    public static void getDetails(ExpandableListView ExpList){
+
+    public static void getDetails(ExpandableListView ExpList) {
         Details = ExpList;
     }
-    public static ExpandableListView setExpandableListVieew(ExpandableListView ExpList){
+
+    public static ExpandableListView setExpandableListVieew(ExpandableListView ExpList) {
         ExpList = Details;
         return ExpList;
     }

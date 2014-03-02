@@ -6,7 +6,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.SECDUST.jobconnnection.MainActivity$PlaceholderFragment">
+    tools:context="com.SECDUST.jobconnnection.MainActivity$PlaceholderFragment"
+    android:visibility="visible"
+    android:background="#00BCFF">
 
     <TextView
         android:id="@+id/section_label"
@@ -19,7 +21,8 @@
         android:text="Search"
         android:id="@+id/carrersearch"
         android:layout_below="@+id/searchTxt"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/buttonsmall" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -31,7 +34,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Enter an Occupation"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:background="@drawable/txtbox"
+        android:gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,30 +46,6 @@
         android:layout_alignTop="@+id/carrersearch"
         android:layout_toRightOf="@+id/section_label" />
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/spinner"
-        android:visibility="invisible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView"
-            android:layout_below="@+id/carrersearch"
-            android:layout_toRightOf="@+id/section_label"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/searchTxt"
-            android:layout_alignEnd="@+id/searchTxt" />
-    </ScrollView>
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +54,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:minHeight="48dp"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:background="@drawable/txtbox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ExpandableListView
         android:layout_width="wrap_content"
@@ -81,26 +65,11 @@
         android:id="@+id/expandableListView"
         android:layout_below="@+id/spinner"
         android:layout_toRightOf="@+id/section_label"
-        android:divider="@color/abc_search_url_text_selected"
-        android:dividerHeight="10px"
         android:drawSelectorOnTop="false"
         android:choiceMode="singleChoice"
         android:groupIndicator="@null"
-        android:footerDividersEnabled="false" /><![CDATA[
+        android:footerDividersEnabled="false"
+        android:visibility="invisible"
+        android:background="@drawable/expandableitemground" />
 
-
-    TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:layout_below="@+id/carrersearch"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
-        android:lines="10" />
-
-]]>
 </RelativeLayout>

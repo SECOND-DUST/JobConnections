@@ -41,8 +41,8 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
     public Activity context2 = this;
 
-    static String LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
-    static String socSearchURL = "soc/search";
+    public static String LMIforAllBaseURL = "http://api.lmiforall.org.uk/api/v1/";
+    public static String socSearchURL = "soc/search";
     EditText etQuery;
     TextView tvIsConnected;
     TextView tvResponse;
@@ -66,6 +66,7 @@ public class MainActivity extends Activity {
         //getting the text input + button ready for using.
         //Also setting the button to disabled by default.
         txtSearch = (EditText) findViewById(R.id.searchTxt);
+        txtSearch.setText(start_search.txtSearch2.getText());
         final Button btnSearch = (Button) findViewById(R.id.carrersearch);
         btnSearch.setEnabled(!txtSearch.getText().toString().trim().equals(""));
 
@@ -105,7 +106,14 @@ public class MainActivity extends Activity {
         GlobalVars.getSepResult(sepresult);
 
         // call AsynTask to perform network operation on separate
-        new HttpAsyncTask().execute(LMIforAllBaseURL + socSearchURL + "?q=chef");
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String query = txtSearch.getText().toString().replace(" ", "+");
+                String QueryURL = LMIforAllBaseURL + socSearchURL + "?q=" + query;
+                new HttpAsyncTask().execute(QueryURL);
+            }
+        });
 
 
         sepresult.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -115,6 +123,7 @@ public class MainActivity extends Activity {
                     ExpListItems = SetStandardGroups();
                     ExpAdapter = new ExpandListAdapter(MainActivity.this, ExpListItems);
                     Details.setAdapter(ExpAdapter);
+                    Details.setVisibility(View.VISIBLE);
 
                 }
             }
@@ -136,6 +145,7 @@ public class MainActivity extends Activity {
         else
             return false;
     }
+
     public static ArrayList<ExpandListGroup> SetStandardGroups() {
         ArrayList<ExpandListGroup> list = new ArrayList<ExpandListGroup>();
         ArrayList<ExpandListChild> list2 = new ArrayList<ExpandListChild>();

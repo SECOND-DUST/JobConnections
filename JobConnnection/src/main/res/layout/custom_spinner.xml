@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="3px" >
+    android:padding="3px"
+    android:gravity="center">
 
     <TextView
         android:id="@+id/text_main_seen"
@@ -11,11 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5px"
         android:layout_marginTop="2px"
-        android:layout_toRightOf="@+id/left_pic"
         android:padding="3px"
         android:text="JMD Group"
-        android:textColor="#0022ee"
-        android:textSize="22px"
+        android:textColor="#000000"
+        android:textSize="15dp"
         android:textStyle="bold" />
 
 </RelativeLayout>
